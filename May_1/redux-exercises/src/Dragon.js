@@ -12,10 +12,40 @@
 */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as Redux from 'redux';
+import reducer from './dragon.reducer';
+
+let store = Redux.createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 class DragonGame extends React.Component {
+  fight(){
+    store.dispatch({
+      type: 'fight',
+      value: Math.random()
+    });
+  }
+
+  flight(){
+    store.dispatch({
+      type:'flight',
+      value: Math.random()
+    })
+
+
+    atch({
+      type: 'flight',
+      value: Math.random()
+    });
+  }
+
   render() {
     let message;
+    if (value) {
+      let score = value >
+    }
     return (
       <div>
         <img src="http://img10.deviantart.net/e984/i/2015/287/c/5/red_dragon_by_sandara-d6hpycs.jpg" width="300"/>
@@ -25,10 +55,10 @@ class DragonGame extends React.Component {
         <br/>
         {message}
         <br/>
-        <button>
+        <button onClick={fight}>
           Fight
         </button>
-        <button>
+        <button onClick={flight}>
           Flight
         </button>
       </div>

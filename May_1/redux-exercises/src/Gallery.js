@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import * as Redux from 'redux';
 import reducer from './Gallery.reducer';
 
+
 const IMAGES = [
   'images/comfy.jpg',
   'images/farted.jpg',
@@ -12,23 +13,29 @@ const IMAGES = [
   'images/monorail.jpg',
 ];
 
-let store = Redux.createStore(reducer);
+let store = Redux.createStore(reducer,  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 class Gallery extends React.Component {
+
   render() {
-    let currentImage = this.props.images[0];
+    let state =store.getState();
+    let currentImage =state.images[state.currentIndex];
+    let next = () => store.dispatch({type: 'next'});
+    let previous = () => store.dispatch({type: 'previous'});
+
     return (
       <div>
-        <button>
+        <button onClick={previous}>
           Previous
         </button>
-        <button>
+        <button onClick={next}>
           Next
         </button>
         <br/>
           <img src={currentImage} key={currentImage}/>
         <div>
-          {this.props.images.map((imageUrl, idx) =>
+          {state.images.map((imageUrl, idx) =>
             <img key={idx} src={imageUrl} height="60"/>
           )}
         </div>
@@ -39,9 +46,15 @@ class Gallery extends React.Component {
 
 function display() {
   ReactDOM.render(
-    <Gallery images={IMAGES}/>,
+    <Gallery />,
     document.getElementById('root')
   );
 }
+
 display();
 store.subscribe(display);
+
+store.dispatch({
+  type: 'receive_images',
+  images: IMAGES
+});

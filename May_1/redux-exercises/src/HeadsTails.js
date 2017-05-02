@@ -1,12 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// Add code to create a store
+import * as Redux from 'redux';
 import reducer from './HeadsTails.reducer';
 
-// Add code to create a store
+let store = Redux.createStore(reducer,
+window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 class HeadsTails extends React.Component {
+  flip(){
+    store.dispatch({
+      type: 'flip',
+      value: Math.random()
+    });
+  }
+
   render() {
-    let value = 0.6;
+    let value = this.props.on;
     let coinDisplay;
     if (value) {
       let imageUrl = value > 0.5 ?
@@ -17,7 +28,7 @@ class HeadsTails extends React.Component {
     return (
       <div>
         {coinDisplay}
-        <button>
+        <button onClick ={() => this.flip()}>
           Flip!
         </button>
       </div>
@@ -27,4 +38,9 @@ class HeadsTails extends React.Component {
 
 // Wrap this in a display function, and subscribe to store's state
 // changes and re-display
-ReactDOM.render(<HeadsTails/>, document.getElementById('root'));
+function display() {
+ReactDOM.render(<HeadsTails on ={store.getState()}/>,      document.getElementById('root'));
+};
+
+display();
+store.subscribe(display);
