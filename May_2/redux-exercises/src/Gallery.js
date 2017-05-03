@@ -1,41 +1,44 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import * as Redux from 'redux';
-import reducer from './Gallery.reducer';
 
 
-const IMAGES = [
-  'images/comfy.jpg',
-  'images/farted.jpg',
-  'images/hate.jpg',
-  'images/lolcat_airplane.jpg',
-  'images/mocked.jpg',
-  'images/monorail.jpg',
-];
 
-let store = Redux.createStore(reducer,  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+export default class Gallery extends React.Component {
 
-class Gallery extends React.Component {
+  select(idx) {
+    this.props.selectImage(idx);
+  }
 
   render() {
-    let state =store.getState();
-    let currentImage =state.images[state.currentIndex];
-    let next = () => store.dispatch({type: 'next'});
-    let previous = () => store.dispatch({type: 'previous'});
+
+
+
+    const images = [
+      'images/comfy.jpg',
+      'images/farted.jpg',
+      'images/hate.jpg',
+      'images/lolcat_airplane.jpg',
+      'images/mocked.jpg',
+      'images/monorail.jpg',
+    ];
+
+
+    // let state =store.getState();
+    let currentImage = images[this.props.currentIndex];
+    // let next = () => store.dispatch({type: 'next'});
+    // let previous = () => store.dispatch({type: 'previous'});
 
     return (
       <div>
-        <button onClick={previous}>
+        <button onClick={this.props.previous}>
           Previous
         </button>
-        <button onClick={next}>
+        <button onClick={this.props.next}>
           Next
         </button>
         <br/>
           <img src={currentImage} key={currentImage}/>
         <div>
-          {state.images.map((imageUrl, idx) =>
+          {images.map((imageUrl, idx) =>
             <img key={idx} src={imageUrl} height="60"/>
           )}
         </div>
@@ -43,18 +46,3 @@ class Gallery extends React.Component {
     );
   }
 }
-
-function display() {
-  ReactDOM.render(
-    <Gallery />,
-    document.getElementById('root')
-  );
-}
-
-display();
-store.subscribe(display);
-
-store.dispatch({
-  type: 'receive_images',
-  images: IMAGES
-});
